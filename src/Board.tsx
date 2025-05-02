@@ -1,15 +1,18 @@
 import { JSX } from 'react';
-import { useGameStore } from 'src/hooks';
 import Square from 'src/Square';
 import { calculateStatus, calculateTurns, calculateWinner } from 'src/utils';
 
-export default function Board(): JSX.Element {
-    const xIsNext = useGameStore((state) => state.xIsNext);
-    const setXIsNext = useGameStore((state) => state.setXIsNext);
+interface BoardProps {
+    onPlay?: (nextSquares: Array<'X' | 'O' | null>) => void;
+    squares: Array<'X' | 'O' | null>;
+    xIsNext: boolean;
+}
 
-    const squares = useGameStore((state) => state.squares);
-    const setSquares = useGameStore((state) => state.setSquares);
-
+export default function Board({
+    onPlay,
+    squares,
+    xIsNext,
+}: BoardProps): JSX.Element {
     const winner = calculateWinner(squares);
     const turns = calculateTurns(squares);
 
@@ -23,8 +26,7 @@ export default function Board(): JSX.Element {
         const nextSquares = squares.slice();
         nextSquares[i] = player;
 
-        setSquares(nextSquares);
-        setXIsNext(!xIsNext);
+        onPlay?.(nextSquares);
     };
 
     return (

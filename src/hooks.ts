@@ -4,15 +4,15 @@ import { combine } from 'zustand/middleware';
 type Square = 'X' | 'O' | null;
 
 interface GameStoreStates {
-    squares: Array<Square>;
+    history: Array<Array<Square>>;
     xIsNext: boolean;
 }
 
 interface GameStoreActions {
-    setSquares: (
-        netSquares:
-            | Array<Square>
-            | ((currentSquares: Array<Square>) => Array<Square>),
+    setHistory: (
+        nextHistory:
+            | Array<Array<Square>>
+            | ((currentHistory: Array<Array<Square>>) => Array<Array<Square>>),
     ) => void;
     setXIsNext: (
         nextXIsNext: boolean | ((currentXIsNext: boolean) => boolean),
@@ -21,14 +21,14 @@ interface GameStoreActions {
 
 const useGameStore = create(
     combine<GameStoreStates, GameStoreActions>(
-        { squares: Array(9).fill(null), xIsNext: true },
+        { history: [Array(9).fill(null)], xIsNext: true },
         (set) => ({
-            setSquares: (nextSquares) => {
+            setHistory: (nextHistory) => {
                 set((state) => ({
-                    squares:
-                        typeof nextSquares === 'function'
-                            ? nextSquares(state.squares)
-                            : nextSquares,
+                    history:
+                        typeof nextHistory === 'function'
+                            ? nextHistory(state.history)
+                            : nextHistory,
                 }));
             },
             setXIsNext: (nextXIsNext) => {
