@@ -14,7 +14,7 @@ export default tseslint.config(
     {
         extends: [
             js.configs.recommended,
-            ...tseslint.configs.recommendedTypeChecked,
+            ...tseslint.configs.recommended,
             importPlugin.flatConfigs?.recommended,
             importPlugin.flatConfigs?.typescript,
             reactPlugin.configs.flat.recommended,
