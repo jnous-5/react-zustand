@@ -6,14 +6,23 @@ export default function Game(): JSX.Element {
     const history = useGameStore((state) => state.history);
     const setHistory = useGameStore((state) => state.setHistory);
 
-    const xIsNext = useGameStore((state) => state.xIsNext);
-    const setXIsNext = useGameStore((state) => state.setXIsNext);
+    const currentMove = useGameStore((state) => state.currentMove);
+    const setCurrentMove = useGameStore((state) => state.setCurrentMove);
 
-    const currentSquares = history[history.length - 1];
+    const xIsNext = currentMove % 2 === 0;
+    const currentSquares = history[currentMove];
 
-    const handlePlay = (nextSquares: Array<'X' | 'O' | null>) => {
-        setHistory(history.concat([nextSquares]));
-        setXIsNext(!xIsNext);
+    const handlePlay = (nextSquares: Array<'X' | 'O' | null>): void => {
+        const nextHistory = history
+            .slice(0, currentMove + 1)
+            .concat([nextSquares]);
+
+        setHistory(nextHistory);
+        setCurrentMove(nextHistory.length - 1);
+    };
+
+    const jumpTo = (nextMove: number): void => {
+        setCurrentMove(nextMove);
     };
 
     return (
@@ -32,7 +41,22 @@ export default function Game(): JSX.Element {
                 />
             </div>
             <div style={{ marginLeft: '1rem' }}>
-                <ol>{/* TODO */}</ol>
+                <ol>
+                    {history.map((_, historyIndex) => {
+                        const description =
+                            historyIndex > 0
+                                ? `Go to move #${historyIndex}`
+                                : 'Go to game start';
+
+                        return (
+                            <li key={historyIndex}>
+                                <button onClick={() => jumpTo(historyIndex)}>
+                                    {description}
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ol>
             </div>
         </div>
     );

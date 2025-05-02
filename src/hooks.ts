@@ -5,7 +5,7 @@ type Square = 'X' | 'O' | null;
 
 interface GameStoreStates {
     history: Array<Array<Square>>;
-    xIsNext: boolean;
+    currentMove: number;
 }
 
 interface GameStoreActions {
@@ -14,14 +14,14 @@ interface GameStoreActions {
             | Array<Array<Square>>
             | ((currentHistory: Array<Array<Square>>) => Array<Array<Square>>),
     ) => void;
-    setXIsNext: (
-        nextXIsNext: boolean | ((currentXIsNext: boolean) => boolean),
+    setCurrentMove: (
+        nextCurrentMove: number | ((currentMove: number) => number),
     ) => void;
 }
 
 const useGameStore = create(
     combine<GameStoreStates, GameStoreActions>(
-        { history: [Array(9).fill(null)], xIsNext: true },
+        { history: [Array(9).fill(null)], currentMove: 0 },
         (set) => ({
             setHistory: (nextHistory) => {
                 set((state) => ({
@@ -31,12 +31,12 @@ const useGameStore = create(
                             : nextHistory,
                 }));
             },
-            setXIsNext: (nextXIsNext) => {
+            setCurrentMove: (nextCurrentMove) => {
                 set((state) => ({
-                    xIsNext:
-                        typeof nextXIsNext === 'function'
-                            ? nextXIsNext(state.xIsNext)
-                            : nextXIsNext,
+                    currentMove:
+                        typeof nextCurrentMove === 'function'
+                            ? nextCurrentMove(state.currentMove)
+                            : nextCurrentMove,
                 }));
             },
         }),
