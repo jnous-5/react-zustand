@@ -1,14 +1,14 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
-  "name": "React + Zustand",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
-  "remoteUser": "node",
-  "containerEnv": {
-    // Set vscode as the default editor for git
-    "GIT_EDITOR": "code --wait"
-  },
-  "runArgs": ["--name", "${containerWorkspaceFolderBasename}"],
-  "postCreateCommand": "yarn install"
+    "name": "React + Zustand",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "remoteUser": "node",
+    "containerEnv": {
+        // Set vscode as the default editor for git
+        "GIT_EDITOR": "code --wait"
+    },
+    "runArgs": ["--name", "${containerWorkspaceFolderBasename}"],
+    "postCreateCommand": "yarn install"
 }
